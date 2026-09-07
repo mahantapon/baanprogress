@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BaanProgress — ระบบรายงานความคืบหน้าโครงการก่อสร้าง</title>
+<meta name="description" content="ให้เจ้าของบ้านเห็นความคืบหน้าโครงการทุกวัน พร้อมภาพหน้างานจริง — ทีมช่างทำงานเหมือนเดิม ระบบจัดการให้ทั้งหมด">
+<meta property="og:title" content="BaanProgress — ทุกความคืบหน้าของบ้าน อยู่ในมือลูกค้าคุณ">
+<meta property="og:description" content="ระบบรายงานความคืบหน้าสำหรับบริษัทรับสร้างบ้าน ติดตั้งใน 1 ชั่วโมง ไม่ต้องมีเซิร์ฟเวอร์">
+<script>
+/* ใส่คลาส anim ต่อเมื่อเบราว์เซอร์รองรับจริง — ถ้าไม่รองรับหรือ JS พัง เนื้อหาจะแสดงปกติ ไม่มีวันหน้าเปล่า */
+if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.documentElement.className = 'anim';
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─────────────── โทเคน ─────────────── */
+:root{
+  --ink:#080C14; --ink2:#111825; --ink3:#1B2534; --ink4:#28344a;
+  --gold:#D6A85C; --gold-lt:#F2CE8B; --gold-dp:#B08536;
+  --paper:#FFFFFF; --paper2:#F3F6FA; --paper3:#E8EDF4;
+  --txt:#0C1420; --txt2:#54637A; --txt3:#8A98AC;
+  --line:#E2E8F0;
+  --on-d:#EDF2F9; --on-d2:#93A3BA; --on-d3:#5D6D85;
+  --ok:#3FA46A;
+  --sp:clamp(64px,9vw,132px);
+  --rad:20px;
+  --maxw:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--txt);
+  font-family:'IBM Plex Sans Thai','Noto Sans Thai',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:16.5px;line-height:1.78;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4,.dsp{font-family:'Anuphan','IBM Plex Sans Thai',sans-serif;font-weight:600;
+  line-height:1.2;letter-spacing:-.015em;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.sec{padding:var(--sp) 0;position:relative}
+.dark{background:var(--ink);color:var(--on-d)}
+.dark h1,.dark h2,.dark h3{color:#fff}
+.soft{background:var(--paper2)}
+
+/* ─────────────── ตัวอักษรระดับต่าง ๆ ─────────────── */
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--gold-dp);margin-bottom:16px;font-family:'Anuphan',sans-serif}
+.dark .eyebrow{color:var(--gold)}
+.h-xl{font-size:clamp(38px,7.2vw,76px);font-weight:700;letter-spacing:-.028em}
+.h-lg{font-size:clamp(29px,4.4vw,50px);font-weight:600;letter-spacing:-.022em}
+.h-md{font-size:clamp(21px,2.5vw,29px);font-weight:600}
+.lead{font-size:clamp(16.5px,1.75vw,20px);color:var(--txt2);line-height:1.75;max-width:58ch}
+.dark .lead{color:var(--on-d2)}
+.sub{color:var(--txt2);font-size:15.5px}
+.dark .sub{color:var(--on-d2)}
+.center{text-align:center}
+.center .lead{margin-left:auto;margin-right:auto}
+
+/* ─────────────── นำทาง ─────────────── */
+.nav{position:fixed;inset:0 0 auto 0;z-index:80;padding:14px 0;
+  transition:background .35s ease,backdrop-filter .35s ease,box-shadow .35s ease,padding .35s ease}
+.nav.stuck{background:rgba(8,12,20,.82);backdrop-filter:saturate(180%) blur(18px);
+  -webkit-backdrop-filter:saturate(180%) blur(18px);box-shadow:0 1px 0 rgba(255,255,255,.07);padding:9px 0}
+.nav .in{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:11px;font-family:'Anuphan',sans-serif;font-weight:700;
+  font-size:18px;color:#fff;letter-spacing:-.02em}
+.brand .mk{width:31px;height:31px;border-radius:9px;flex:0 0 auto;
+  background:linear-gradient(145deg,var(--gold-lt),var(--gold-dp));display:grid;place-items:center;
+  box-shadow:0 4px 14px rgba(214,168,92,.35)}
+.brand .mk svg{width:17px;height:17px}
+.nav .links{margin-left:auto;display:flex;align-items:center;gap:30px}
+.nav .links a{font-size:14.5px;color:rgba(255,255,255,.72);transition:color .2s}
+.nav .links a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:13px 26px;border-radius:999px;font-weight:600;font-size:15px;border:0;cursor:pointer;
+  font-family:'Anuphan',sans-serif;transition:transform .22s cubic-bezier(.2,.7,.3,1),box-shadow .22s,filter .22s;
+  white-space:nowrap;text-decoration:none}
+.btn-gold{background:linear-gradient(160deg,var(--gold-lt),var(--gold));color:#241a08;
+  box-shadow:0 8px 26px rgba(214,168,92,.34)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(214,168,92,.44)}
+.btn-ghost{background:rgba(255,255,255,.09);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-ghost:hover{background:rgba(255,255,255,.16);transform:translateY(-2px)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(8,12,20,.28)}
+.btn-sm{padding:10px 20px;font-size:14px}
+.nav .btn{margin-left:4px}
+@media(max-width:860px){.nav .links a{display:none}}
+
+/* ─────────────── ฮีโร่ ─────────────── */
+.hero{background:var(--ink);color:var(--on-d);position:relative;overflow:hidden;
+  padding:clamp(118px,15vw,168px) 0 clamp(60px,7vw,90px)}
+.hero::before{content:'';position:absolute;left:50%;top:-32%;width:min(1150px,135vw);aspect-ratio:1;
+  transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(circle,rgba(214,168,92,.20) 0%,rgba(214,168,92,.07) 34%,transparent 66%)}
+.hero::after{content:'';position:absolute;inset:auto 0 0 0;height:180px;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,rgba(8,12,20,.9))}
+.hero .in{position:relative;z-index:2;text-align:center}
+.hero h1{margin:0 0 22px}
+.hero h1 .gd{background:linear-gradient(100deg,var(--gold-lt),var(--gold) 55%,#e9c489);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{margin:0 auto 34px;color:#B9C6D8}
+.cta-row{display:flex;gap:13px;justify-content:center;flex-wrap:wrap}
+.hero .note{margin-top:20px;font-size:13.5px;color:var(--on-d3)}
+
+/* ─────────────── กรอบมือถือ ─────────────── */
+.phone{position:relative;width:100%;max-width:288px;margin:0 auto;aspect-ratio:390/844;
+  border-radius:40px;padding:9px;background:linear-gradient(160deg,#39445a,#171e2b 42%,#333d51);
+  box-shadow:0 40px 80px -22px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.07),
+             inset 0 0 0 1px rgba(255,255,255,.05)}
+.phone .scr{position:relative;width:100%;height:100%;border-radius:32px;overflow:hidden;background:#0a0e16}
+.phone .scr img{width:100%;height:100%;object-fit:cover;object-position:top center}
+.phone .notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);
+  width:92px;height:23px;background:#0b0f18;border-radius:0 0 15px 15px;z-index:3}
+.hero-phone{margin-top:52px;animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+/* ─────────────── กรอบคอม ─────────────── */
+.laptop{max-width:920px;margin:0 auto;position:relative}
+.laptop .lid{border-radius:16px 16px 4px 4px;padding:12px 12px 0;
+  background:linear-gradient(160deg,#333d51,#1a2130);box-shadow:0 34px 70px -26px rgba(0,0,0,.62)}
+.laptop .scr{border-radius:8px;overflow:hidden;background:#0a0e16;aspect-ratio:16/10}
+.laptop .scr img{width:100%;height:100%;object-fit:cover;object-position:top center}
+.laptop .base{height:15px;border-radius:0 0 15px 15px;margin:0 -3%;
+  background:linear-gradient(180deg,#2a3244,#141a26);
+  box-shadow:0 16px 26px -12px rgba(0,0,0,.55)}
+.laptop .base::after{content:'';display:block;width:88px;height:4px;margin:0 auto;
+  background:rgba(0,0,0,.4);border-radius:0 0 6px 6px}
+
+/* ─────────────── ปรากฏตอนเลื่อน ─────────────── */
+.rv{transition:opacity .85s cubic-bezier(.2,.7,.3,1),transform .85s cubic-bezier(.2,.7,.3,1)}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+.rv.d4{transition-delay:.4s}.rv.d5{transition-delay:.5s}
+/* ซ่อนไว้รอ reveal เฉพาะเมื่อเบราว์เซอร์พร้อมจริง */
+html.anim .rv{opacity:0;transform:translateY(30px)}
+html.anim .rv.in{opacity:1;transform:none}
+/* ปุ่มฉุกเฉิน: บังคับโชว์ทันทีโดยไม่ผ่าน transition */
+html.rv-all .rv{opacity:1!important;transform:none!important;transition:none!important}
+html.rv-all .bub,html.rv-all .mini-card,html.rv-all .chat .arrow{opacity:1!important;transform:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  .hero-phone{animation:none}
+  html{scroll-behavior:auto}
+}
+
+/* ─────────────── ตัวเลข ─────────────── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:60px}
+.stat{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);
+  border-radius:16px;padding:22px 18px;text-align:center}
+.stat b{display:block;font-family:'Anuphan',sans-serif;font-size:clamp(25px,3.4vw,36px);
+  font-weight:700;color:var(--gold-lt);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--on-d2);display:block;margin-top:3px;line-height:1.5}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}}
+
+/* ─────────────── ปัญหา ─────────────── */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px}
+.pain{background:var(--paper);border:1px solid var(--line);border-radius:var(--rad);padding:28px 26px;
+  position:relative;overflow:hidden}
+.pain .q{font-family:'Anuphan',sans-serif;font-size:56px;line-height:1;color:var(--paper3);
+  position:absolute;right:16px;top:8px;font-weight:700}
+.pain h3{font-size:18.5px;margin-bottom:9px;position:relative}
+.pain p{font-size:14.8px;color:var(--txt2);position:relative}
+@media(max-width:860px){.pains{grid-template-columns:1fr}}
+
+/* ─────────────── ขั้นตอน 3 ข้อ ─────────────── */
+.flow{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,5vw,72px);align-items:center;margin-top:56px}
+@media(max-width:900px){.flow{grid-template-columns:1fr;gap:44px}}
+.steps{list-style:none;margin:0;padding:0;counter-reset:st}
+.steps li{position:relative;padding:0 0 30px 62px;border-left:2px solid rgba(255,255,255,.12);margin-left:18px}
+.steps li:last-child{border-left-color:transparent;padding-bottom:0}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:-19px;top:-4px;
+  width:37px;height:37px;border-radius:50%;background:linear-gradient(150deg,var(--gold-lt),var(--gold-dp));
+  color:#251a07;font-weight:700;font-family:'Anuphan',sans-serif;font-size:15px;
+  display:grid;place-items:center;box-shadow:0 5px 18px rgba(214,168,92,.32)}
+.steps h3{font-size:19.5px;margin-bottom:7px;color:#fff}
+.steps p{font-size:15px;color:var(--on-d2)}
+
+/* แชทไลน์จำลอง */
+.chat{background:linear-gradient(170deg,#1a2331,#101724);border:1px solid rgba(255,255,255,.09);
+  border-radius:24px;padding:20px;box-shadow:0 30px 60px -26px rgba(0,0,0,.7)}
+.chat .top{display:flex;align-items:center;gap:9px;padding-bottom:14px;margin-bottom:15px;
+  border-bottom:1px solid rgba(255,255,255,.08);font-size:13.5px;color:var(--on-d2)}
+.chat .top i{width:9px;height:9px;border-radius:50%;background:#4ade80;flex:0 0 auto;
+  box-shadow:0 0 9px rgba(74,222,128,.55)}
+.bub{max-width:86%;padding:12px 15px;border-radius:16px;font-size:14.2px;line-height:1.62;margin-bottom:11px;
+  transition:all .55s cubic-bezier(.2,.7,.3,1)}
+html.anim .bub{opacity:0;transform:translateY(14px) scale(.97)}
+html.anim .chat.in .bub{opacity:1;transform:none}
+.chat.in .bub{opacity:1;transform:none}
+.chat.in .bub:nth-child(2){transition-delay:.15s}
+.chat.in .bub:nth-child(3){transition-delay:.85s}
+.chat.in .bub:nth-child(4){transition-delay:1.5s}
+.bub.me{background:#2b6b4f;color:#eafff3;margin-left:auto;border-bottom-right-radius:5px;white-space:pre-line}
+.bub.bot{background:rgba(255,255,255,.08);color:var(--on-d);border-bottom-left-radius:5px;
+  border:1px solid rgba(255,255,255,.07)}
+.bub.bot b{color:var(--gold-lt)}
+.chat .arrow{text-align:center;color:var(--gold);font-size:20px;margin:6px 0 12px;transition:opacity .5s .9s}
+html.anim .chat .arrow{opacity:0}
+html.anim .chat.in .arrow{opacity:1}
+.chat.in .arrow{opacity:1}
+.mini-card{background:rgba(255,255,255,.05);border:1px solid rgba(214,168,92,.3);border-radius:14px;
+  padding:14px 16px;font-size:13.6px;color:var(--on-d);transition:all .6s cubic-bezier(.2,.7,.3,1) 1.15s}
+html.anim .mini-card{opacity:0;transform:translateY(14px)}
+html.anim .chat.in .mini-card{opacity:1;transform:none}
+.chat.in .mini-card{opacity:1;transform:none}
+.mini-card .r{display:flex;justify-content:space-between;gap:12px;padding:4px 0}
+.mini-card .r span:first-child{color:var(--on-d3)}
+.mini-card .hd{font-family:'Anuphan',sans-serif;font-weight:600;color:var(--gold-lt);
+  margin-bottom:8px;font-size:14px}
+
+/* ─────────────── โชว์แท็บ ─────────────── */
+.show{display:grid;grid-template-columns:1fr 340px;gap:clamp(34px,5vw,76px);align-items:center;margin-top:50px}
+@media(max-width:960px){.show{grid-template-columns:1fr;gap:38px}}
+.tabs{display:flex;flex-direction:column;gap:9px}
+.tb{display:flex;gap:15px;align-items:flex-start;text-align:left;width:100%;
+  background:transparent;border:1px solid transparent;border-radius:16px;padding:17px 19px;
+  cursor:pointer;transition:all .28s cubic-bezier(.2,.7,.3,1);font-family:inherit;color:inherit;
+  border-left:3px solid rgba(255,255,255,.1)}
+.tb .ic{font-size:21px;line-height:1.25;flex:0 0 auto}
+.tb .tx h3{font-size:17.5px;margin-bottom:3px;color:rgba(255,255,255,.72);transition:color .28s}
+.tb .tx p{font-size:14.2px;color:var(--on-d3);transition:color .28s}
+.tb:hover{background:rgba(255,255,255,.045)}
+.tb.on{background:rgba(255,255,255,.07);border-left-color:var(--gold);
+  box-shadow:0 12px 30px -14px rgba(0,0,0,.6)}
+.tb.on .tx h3{color:#fff}
+.tb.on .tx p{color:var(--on-d2)}
+.shot-wrap{position:relative}
+.shot-wrap .phone .scr img{position:absolute;inset:0;opacity:0;transition:opacity .55s ease}
+.shot-wrap .phone .scr img.on{opacity:1}
+.dots{display:none;gap:7px;justify-content:center;margin-top:18px}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.24);transition:all .3s}
+.dots i.on{background:var(--gold);width:22px;border-radius:4px}
+@media(max-width:960px){.dots{display:flex}}
+
+/* ─────────────── ตารางคุณสมบัติ ─────────────── */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px}
+@media(max-width:940px){.feats{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.feats{grid-template-columns:1fr}}
+.ft{background:var(--paper);border:1px solid var(--line);border-radius:var(--rad);padding:26px 24px;
+  transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s,border-color .3s}
+.ft:hover{transform:translateY(-5px);box-shadow:0 20px 42px -22px rgba(12,20,32,.28);border-color:#cfd9e6}
+.ft .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:21px;
+  background:linear-gradient(150deg,#fdf3e0,#f6e3c2);margin-bottom:15px}
+.ft h3{font-size:17.5px;margin-bottom:7px}
+.ft p{font-size:14.6px;color:var(--txt2)}
+
+/* ─────────────── สลับจอ ─────────────── */
+.seg{display:inline-flex;background:var(--paper3);border-radius:999px;padding:5px;gap:4px;margin:0 auto 40px}
+.dark .seg{background:rgba(255,255,255,.09)}
+.seg button{border:0;background:transparent;padding:9px 24px;border-radius:999px;cursor:pointer;
+  font-family:'Anuphan',sans-serif;font-weight:600;font-size:14.5px;color:var(--txt2);transition:all .28s}
+.dark .seg button{color:var(--on-d2)}
+.seg button.on{background:var(--paper);color:var(--txt);box-shadow:0 3px 10px rgba(12,20,32,.12)}
+.dark .seg button.on{background:rgba(255,255,255,.95);color:var(--txt)}
+.devview{position:relative;min-height:clamp(330px,44vw,540px)}
+.devview>div{position:absolute;inset:0;display:grid;place-items:center;opacity:0;
+  transform:scale(.97);transition:opacity .5s,transform .5s;pointer-events:none}
+.devview>div.on{opacity:1;transform:none;pointer-events:auto}
+
+/* ─────────────── 2 รุ่น ─────────────── */
+.eds{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:52px}
+@media(max-width:860px){.eds{grid-template-columns:1fr}}
+.ed{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--paper);
+  display:flex;flex-direction:column}
+.ed.hero-ed{border-color:var(--gold);box-shadow:0 24px 60px -30px rgba(214,168,92,.5)}
+.ed .hd{padding:26px 28px 22px;background:var(--paper2);border-bottom:1px solid var(--line)}
+.ed.hero-ed .hd{background:linear-gradient(150deg,var(--ink2),var(--ink));color:#fff;border-bottom-color:transparent}
+.ed .hd .nm{font-family:'Anuphan',sans-serif;font-weight:700;font-size:23px;display:flex;align-items:center;gap:10px}
+.ed .hd .for{font-size:14.2px;color:var(--txt2);margin-top:5px}
+.ed.hero-ed .hd .for{color:var(--on-d2)}
+.tag{background:var(--gold);color:#241a08;font-size:11.5px;font-weight:700;padding:3px 11px;
+  border-radius:999px;letter-spacing:.02em}
+.ed .bd{padding:24px 28px 30px;flex:1}
+.ed ul{list-style:none;margin:0;padding:0}
+.ed li{padding:8px 0 8px 30px;position:relative;font-size:15px}
+.ed li::before{content:'';position:absolute;left:2px;top:16px;width:15px;height:8px;
+  border-left:2px solid var(--ok);border-bottom:2px solid var(--ok);transform:rotate(-45deg)}
+.ed li.no{color:var(--txt3)}
+.ed li.no::before{border-color:#c9d2de}
+
+/* ─────────────── ราคา ─────────────── */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px;align-items:start}
+@media(max-width:960px){.plans{grid-template-columns:1fr;max-width:520px;margin-inline:auto}}
+.pl{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.12);border-radius:22px;
+  padding:30px 27px;transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s,border-color .3s}
+.pl:hover{transform:translateY(-6px);border-color:rgba(214,168,92,.45);box-shadow:0 26px 54px -26px rgba(0,0,0,.75)}
+.pl.best{background:linear-gradient(170deg,rgba(214,168,92,.16),rgba(255,255,255,.045));
+  border-color:rgba(214,168,92,.5)}
+.pl .nm{font-family:'Anuphan',sans-serif;font-weight:700;font-size:21px;color:#fff;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pl .for{font-size:13.8px;color:var(--on-d2);margin:7px 0 20px;min-height:42px}
+.pl .price{font-family:'Anuphan',sans-serif;font-size:31px;font-weight:700;color:var(--gold-lt);
+  padding:14px 0;border-top:1px dashed rgba(214,168,92,.35);border-bottom:1px dashed rgba(214,168,92,.35);
+  margin-bottom:20px;letter-spacing:-.01em}
+.pl .price small{display:block;font-size:13px;font-weight:400;color:var(--on-d3);
+  letter-spacing:0;margin-top:2px;font-family:'IBM Plex Sans Thai',sans-serif}
+.pl ul{list-style:none;margin:0 0 24px;padding:0}
+.pl li{padding:7px 0 7px 26px;position:relative;font-size:14.6px;color:var(--on-d)}
+.pl li::before{content:'';position:absolute;left:2px;top:15px;width:13px;height:7px;
+  border-left:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(-45deg)}
+.pl li.no{color:var(--on-d3)}
+.pl li.no::before{border-color:rgba(255,255,255,.2)}
+.pl .btn{width:100%}
+
+/* ─────────────── คำถาม ─────────────── */
+.faq{max-width:800px;margin:44px auto 0}
+.qa{border-bottom:1px solid var(--line)}
+.qa button{width:100%;background:none;border:0;text-align:left;padding:22px 44px 22px 0;
+  font-family:'Anuphan',sans-serif;font-weight:600;font-size:17.5px;color:var(--txt);cursor:pointer;
+  position:relative;line-height:1.45}
+.qa button::after{content:'';position:absolute;right:8px;top:29px;width:10px;height:10px;
+  border-right:2px solid var(--txt3);border-bottom:2px solid var(--txt3);
+  transform:rotate(45deg);transition:transform .3s}
+.qa.open button::after{transform:rotate(-135deg);border-color:var(--gold-dp)}
+.qa .ans{max-height:0;overflow:hidden;transition:max-height .42s cubic-bezier(.2,.7,.3,1)}
+.qa .ans p{padding:0 0 24px;color:var(--txt2);font-size:15.4px;max-width:66ch}
+
+/* ─────────────── ปิดท้าย ─────────────── */
+.final{background:linear-gradient(165deg,var(--ink2),var(--ink) 62%);text-align:center;position:relative;overflow:hidden}
+.final::before{content:'';position:absolute;left:50%;bottom:-45%;width:min(940px,120vw);aspect-ratio:1;
+  transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(214,168,92,.19),transparent 62%);pointer-events:none}
+.final .in{position:relative;z-index:2}
+.final .lead{color:var(--on-d2)}
+.final .note{color:var(--on-d3)}
+footer{background:var(--ink);color:var(--on-d3);padding:34px 0;font-size:13.5px;
+  border-top:1px solid rgba(255,255,255,.07)}
+footer .in{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;gap:16px;
+  justify-content:space-between;align-items:center;flex-wrap:wrap}
+footer a{color:var(--on-d2)}
+footer a:hover{color:var(--gold-lt)}
+.badge-demo{display:inline-flex;align-items:center;gap:8px;background:rgba(214,168,92,.14);
+  border:1px solid rgba(214,168,92,.32);color:var(--gold-lt);font-size:13px;
+  padding:7px 16px;border-radius:999px;margin-bottom:22px}
+</style>
+</head>
+<body>
+
+<!-- ══════════ นำทาง ══════════ -->
+<nav class="nav" id="nav">
+  <div class="in">
+    <a href="#top" class="brand">
+      <span class="mk"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11.4 12 4l9 7.4V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#2a1e08"/></svg></span>
+      BaanProgress
+    </a>
+    <div class="links">
+      <a href="#how">วิธีทำงาน</a>
+      <a href="#app">ตัวระบบ</a>
+      <a href="#editions">รุ่น</a>
+      <a href="#price">แพ็กเกจ</a>
+      <a href="#faq">คำถาม</a>
+    </div>
+    <a class="btn btn-gold btn-sm" href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">ลองใช้ฟรี</a>
+  </div>
+</nav>
+
+<!-- ══════════ ฮีโร่ ══════════ -->
+<header class="hero" id="top">
+  <div class="wrap in">
+    <div class="rv in">
+      <div class="badge-demo">🏠 สำหรับบริษัทรับสร้างบ้าน &amp; รีโนเวท</div>
+      <h1 class="h-xl">ทุกความคืบหน้าของบ้าน<br><span class="gd">อยู่ในมือลูกค้าคุณ</span></h1>
+      <p class="lead">ลูกค้าเปิดดูงานหน้างานได้ทุกวัน พร้อมภาพจริง — ส่วนทีมช่างยังทำงานเหมือนเดิม
+        ไม่ต้องเรียนรู้อะไรใหม่ ระบบจัดการให้ทั้งหมด</p>
+      <div class="cta-row">
+        <a class="btn btn-gold" href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">ดูตัวอย่างระบบจริง →</a>
+        <a class="btn btn-ghost" href="#how">ดูวิธีทำงาน</a>
+      </div>
+      <p class="note">ตัวอย่างเปิดดูได้ทันที ไม่ต้องสมัคร · ใช้ได้ทั้งมือถือและคอมพิวเตอร์</p>
+    </div>
+
+    <div class="phone hero-phone rv d2" id="heroPhone">
+      <div class="notch"></div>
+      <div class="scr"><img src="img/m_o.webp" alt="หน้าภาพรวมโครงการบนมือถือ" width="780" height="1688" fetchpriority="high"></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat rv d1"><b data-count="1">0</b><span>ชั่วโมงติดตั้ง<br>ใช้ได้เลย</span></div>
+      <div class="stat rv d2"><b data-count="0">0</b><span>บาทค่าเซิร์ฟเวอร์<br>ต่อเดือน</span></div>
+      <div class="stat rv d3"><b data-count="5">0</b><span>นาทีต่อรายงาน<br>ตรวจแล้วกดอนุมัติ</span></div>
+      <div class="stat rv d4"><b data-count="24">0</b><span>ชั่วโมงลูกค้า<br>เปิดดูได้ตลอด</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ ปัญหา ══════════ -->
+<section class="sec soft">
+  <div class="wrap">
+    <div class="center rv">
+      <div class="eyebrow">ปัญหาที่เจอทุกโครงการ</div>
+      <h2 class="h-lg">“งานถึงไหนแล้วครับ?”</h2>
+      <p class="lead" style="margin-top:16px">คำถามเดิมทุกสัปดาห์ จากลูกค้าทุกหลัง —
+        ไม่ใช่เพราะเขาไม่เชื่อใจ แต่เพราะเขามองไม่เห็น</p>
+    </div>
+    <div class="pains">
+      <div class="pain rv d1"><div class="q">01</div>
+        <h3>ลูกค้าโทรถามไม่หยุด</h3>
+        <p>ทีมต้องเสียเวลาตอบซ้ำ ๆ ทุกวัน บางทีต้องวิ่งไปถ่ายรูปที่ไซต์มาส่งให้ดู</p></div>
+      <div class="pain rv d2"><div class="q">02</div>
+        <h3>รูปกระจัดกระจายในไลน์</h3>
+        <p>ภาพหน้างานจมอยู่ในแชทกลุ่ม ย้อนกลับไปหาว่าวันไหนทำอะไรแทบไม่ได้</p></div>
+      <div class="pain rv d3"><div class="q">03</div>
+        <h3>ดูไม่มืออาชีพตอนเสนองาน</h3>
+        <p>คู่แข่งโชว์ระบบติดตามงานให้ลูกค้าดู เราได้แต่บอกปากเปล่าว่า “ส่งรายงานให้ครับ”</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ วิธีทำงาน ══════════ -->
+<section class="sec dark" id="how">
+  <div class="wrap">
+    <div class="center rv">
+      <div class="eyebrow">วิธีทำงาน</div>
+      <h2 class="h-lg">ช่างทำเหมือนเดิม<br>ที่เหลือระบบจัดการให้</h2>
+      <p class="lead" style="margin-top:16px">ไม่ต้องสอนช่างใช้แอปใหม่ ไม่ต้องเปลี่ยนวิธีทำงานที่คุ้นเคย</p>
+    </div>
+
+    <div class="flow">
+      <ol class="steps rv">
+        <li>
+          <h3>ช่างพิมพ์ในกลุ่มไลน์เดิม</h3>
+          <p>สรุปงานที่ทำ พร้อมส่งรูปหน้างานเข้ากลุ่ม — เหมือนที่ทำอยู่ทุกวัน
+             ระบบอ่านข้อความ แยกงาน จำนวนคน และปัญหาให้เอง เก็บรูปเข้าที่อัตโนมัติ</p>
+        </li>
+        <li>
+          <h3>ทีมเปิดตรวจตอนเย็น</h3>
+          <p>รายงานร่างพร้อมรูปรออยู่แล้ว แก้ข้อความได้ เลือกรูปที่จะให้ลูกค้าเห็น
+             แล้วกดอนุมัติ — ใช้เวลาประมาณ 5 นาทีต่อไซต์</p>
+        </li>
+        <li>
+          <h3>ลูกค้าเห็นทันที</h3>
+          <p>เจ้าของบ้านเปิดลิงก์ ใส่รหัสส่วนตัว 8 หลัก เห็นงานวันนี้ ภาพหน้างานจริง
+             และภาพรวมความคืบหน้าทั้งโครงการ</p>
+        </li>
+      </ol>
+
+      <div class="chat rv d2" id="chat">
+        <div class="top"><i></i> กลุ่มไลน์ · โครงการบ้านคุณเอ</div>
+        <div class="bub me">#สรุปงานวันนี้
+1. ฉาบผนังชั้น 1 ฝั่งทิศเหนือ
+2. เดินท่อประปาห้องน้ำชั้น 2
+คน: โฟร์แมน 1 ช่างปูน 2 แรงงาน 3</div>
+        <div class="bub me">📷 ส่งรูปหน้างาน 6 รูป</div>
+        <div class="bub bot">รับข้อมูลแล้ว <b>✓</b> บันทึกลงระบบและเก็บรูปเข้าโฟลเดอร์วันนี้เรียบร้อยครับ</div>
+        <div class="arrow">↓</div>
+        <div class="mini-card">
+          <div class="hd">รายงานประจำวัน · 7 กันยายน</div>
+          <div class="r"><span>งานที่ทำ</span><span>2 รายการ</span></div>
+          <div class="r"><span>กำลังคน</span><span>6 คน</span></div>
+          <div class="r"><span>ภาพหน้างาน</span><span>6 ภาพ</span></div>
+          <div class="r"><span>สถานะ</span><span style="color:#7fd6a3">รออนุมัติ</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ตัวระบบ (แท็บ) ══════════ -->
+<section class="sec dark" id="app" style="padding-top:0">
+  <div class="wrap">
+    <div class="center rv">
+      <div class="eyebrow">สิ่งที่ลูกค้าเห็น</div>
+      <h2 class="h-lg">เว็บส่วนตัวของบ้านแต่ละหลัง</h2>
+      <p class="lead" style="margin-top:16px">เปิดจากมือถือได้เลย ไม่ต้องโหลดแอป
+        แต่ละหลังมีรหัสของตัวเอง เห็นเฉพาะโครงการตัวเอง</p>
+    </div>
+
+    <div class="show">
+      <div class="tabs rv" id="tabs">
+        <button class="tb on" data-shot="m_o"><span class="ic">🏠</span><span class="tx">
+          <h3>ภาพรวมโครงการ</h3><p>วงแหวนความคืบหน้า มูลค่าสัญญา และขั้นตอนงานทั้งหมดในหน้าเดียว</p></span></button>
+        <button class="tb" data-shot="m_d"><span class="ic">📅</span><span class="tx">
+          <h3>รายงานประจำวัน</h3><p>ปฏิทินย้อนหลัง แตะวันไหนก็เห็นงานวันนั้น กำลังคน สภาพอากาศ และปัญหา</p></span></button>
+        <button class="tb" data-shot="m_lb"><span class="ic">📷</span><span class="tx">
+          <h3>ภาพหน้างานจริง</h3><p>แตะดูภาพเต็มจอ ปัดซ้ายขวาเปลี่ยนรูป ทุกภาพผ่านการคัดจากทีมก่อน</p></span></button>
+        <button class="tb" data-shot="m_w"><span class="ic">📊</span><span class="tx">
+          <h3>สรุปรายสัปดาห์</h3><p>ภาพรวมทั้งสัปดาห์ กี่วันที่ทำงาน ใช้กำลังคนไปเท่าไหร่</p></span></button>
+        <button class="tb" data-shot="m_f"><span class="ic">💳</span><span class="tx">
+          <h3>งวดงานตามสัญญา</h3><p>งวดไหนจ่ายแล้ว งวดถัดไปคืออะไร — เปิดหรือปิดส่วนนี้ก็ได้</p></span></button>
+      </div>
+
+      <div class="shot-wrap rv d2">
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="scr" id="scr">
+            <img src="img/m_o.webp" data-k="m_o" class="on" alt="หน้าภาพรวมโครงการ" width="780" height="1688">
+            <img src="img/m_d.webp" data-k="m_d" alt="หน้ารายงานประจำวัน" loading="lazy" width="780" height="1688">
+            <img src="img/m_lb.webp" data-k="m_lb" alt="ภาพหน้างานแบบเต็มจอ" loading="lazy" width="780" height="1688">
+            <img src="img/m_w.webp" data-k="m_w" alt="หน้าสรุปรายสัปดาห์" loading="lazy" width="780" height="1688">
+            <img src="img/m_f.webp" data-k="m_f" alt="หน้ารายละเอียดงวดงาน" loading="lazy" width="780" height="1688">
+          </div>
+        </div>
+        <div class="dots" id="dots"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ทุกจอ ══════════ -->
+<section class="sec">
+  <div class="wrap center">
+    <div class="rv">
+      <div class="eyebrow">ใช้ได้ทุกอุปกรณ์</div>
+      <h2 class="h-lg">มือถือ แท็บเล็ต หรือคอมพิวเตอร์</h2>
+      <p class="lead" style="margin-top:16px;margin-bottom:34px">หน้าจอปรับตามอุปกรณ์อัตโนมัติ
+        ลูกค้าส่วนใหญ่เปิดจากมือถือ ส่วนทีมงานทำงานบนคอมได้เต็มจอ</p>
+    </div>
+    <div class="seg rv d1" id="seg">
+      <button class="on" data-dev="pc">💻 คอมพิวเตอร์</button>
+      <button data-dev="mb">📱 มือถือ</button>
+    </div>
+    <div class="devview rv d2">
+      <div class="on" data-dev="pc">
+        <div class="laptop">
+          <div class="lid"><div class="scr"><img src="img/pc_d.webp" alt="หน้ารายงานประจำวันบนคอมพิวเตอร์" loading="lazy" width="1600" height="1000"></div></div>
+          <div class="base"></div>
+        </div>
+      </div>
+      <div data-dev="mb">
+        <div class="phone" style="max-width:262px">
+          <div class="notch"></div>
+          <div class="scr"><img src="img/m_gate.webp" alt="หน้าใส่รหัสเข้าดูรายงาน" loading="lazy" width="780" height="1688"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ คุณสมบัติ ══════════ -->
+<section class="sec soft">
+  <div class="wrap">
+    <div class="center rv">
+      <div class="eyebrow">คุณสมบัติ</div>
+      <h2 class="h-lg">ครบตั้งแต่หน้างานถึงมือลูกค้า</h2>
+    </div>
+    <div class="feats">
+      <div class="ft rv d1"><div class="ic">🔐</div><h3>รหัสส่วนตัวรายหลัง</h3>
+        <p>ลูกค้าแต่ละบ้านมีรหัส 8 หลักของตัวเอง เห็นเฉพาะโครงการตัวเอง ไม่ปนกัน</p></div>
+      <div class="ft rv d2"><div class="ic">✅</div><h3>ทีมอนุมัติก่อนเสมอ</h3>
+        <p>ไม่มีอะไรถึงลูกค้าโดยที่ทีมยังไม่ได้ตรวจ คุมภาพและคำพูดได้ทุกฉบับ</p></div>
+      <div class="ft rv d3"><div class="ic">🗂️</div><h3>รูปเข้าที่อัตโนมัติ</h3>
+        <p>ภาพจากหน้างานถูกจัดเก็บแยกวันที่ให้เอง ย้อนดูวันไหนก็เจอ</p></div>
+      <div class="ft rv d1"><div class="ic">📈</div><h3>ความคืบหน้าจากแผนงาน</h3>
+        <p>ใส่แผนงานของโครงการ ระบบคำนวณเปอร์เซ็นต์และขั้นตอนให้เอง</p></div>
+      <div class="ft rv d2"><div class="ic">💳</div><h3>งวดงานตามสัญญา</h3>
+        <p>แสดงงวดที่รับชำระแล้วและงวดถัดไป หรือปิดไม่ให้ลูกค้าเห็นก็ได้</p></div>
+      <div class="ft rv d3"><div class="ic">📆</div><h3>ปฏิทินและวันหยุด</h3>
+        <p>ตั้งวันหยุดบริษัทเองได้ ลูกค้าเห็นว่าวันไหนหยุด ไม่เข้าใจผิดว่างานหยุดชะงัก</p></div>
+      <div class="ft rv d1"><div class="ic">🏗️</div><h3>หลายโครงการพร้อมกัน</h3>
+        <p>เพิ่มโครงการใหม่ = กรอกหนึ่งแถว ไม่จำกัดจำนวน ไม่คิดเพิ่มรายโครงการ</p></div>
+      <div class="ft rv d2"><div class="ic">🎨</div><h3>เป็นแบรนด์ของคุณ</h3>
+        <p>ใส่โลโก้และชื่อบริษัทของคุณเอง ลูกค้าเห็นเป็นระบบของบริษัทคุณ</p></div>
+      <div class="ft rv d3"><div class="ic">💾</div><h3>ข้อมูลเป็นของคุณ 100%</h3>
+        <p>ทุกอย่างอยู่ใน Google ของบริษัทคุณเอง สำรองอัตโนมัติทุกคืน</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 2 รุ่น ══════════ -->
+<section class="sec" id="editions">
+  <div class="wrap">
+    <div class="center rv">
+      <div class="eyebrow">เลือกรุ่นที่ใช่</div>
+      <h2 class="h-lg">ต่างกันแค่ “ข้อมูลเข้าระบบยังไง”</h2>
+      <p class="lead" style="margin-top:16px">สิ่งที่ลูกค้าเห็นและหน้าตรวจของทีม เหมือนกันทั้งสองรุ่น</p>
+    </div>
+    <div class="eds">
+      <div class="ed rv d1">
+        <div class="hd">
+          <div class="nm">Lite</div>
+          <div class="for">ทีมเล็ก มีแอดมินดูแลรายงานอยู่แล้ว</div>
+        </div>
+        <div class="bd"><ul>
+          <li>แอดมินพิมพ์สรุปงานในหน้าตรวจ</li>
+          <li>อัปรูปเข้าโฟลเดอร์จากมือถือ</li>
+          <li>เว็บลูกค้า + รหัสรายหลัง ครบทุกอย่าง</li>
+          <li>แผนงาน งวดงาน วันหยุด ครบ</li>
+          <li>ไม่จำกัดจำนวนโครงการ</li>
+          <li class="no">ไม่มีบอทเก็บข้อมูลจากไลน์</li>
+        </ul></div>
+      </div>
+      <div class="ed hero-ed rv d2">
+        <div class="hd">
+          <div class="nm">Pro <span class="tag">แนะนำ</span></div>
+          <div class="for">ทีมที่ใช้กลุ่มไลน์รายงานกันอยู่แล้ว</div>
+        </div>
+        <div class="bd"><ul>
+          <li><b>บอทไลน์เก็บรายงานให้อัตโนมัติ</b></li>
+          <li>ช่างพิมพ์ในกลุ่มเดิม ไม่ต้องเรียนรู้ใหม่</li>
+          <li>รูปจากไลน์เข้าโฟลเดอร์เองทุกวัน</li>
+          <li>ผู้ช่วย AI ถามข้อมูลย้อนหลังในกลุ่มได้</li>
+          <li>แจ้งเตือนแผนงานเข้ากลุ่มตอนเช้า</li>
+          <li>ทุกอย่างในรุ่น Lite ครบ</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ แพ็กเกจ ══════════ -->
+<section class="sec dark" id="price">
+  <div class="wrap">
+    <div class="center rv">
+      <div class="eyebrow">แพ็กเกจ</div>
+      <h2 class="h-lg">เลือกแบบที่เหมาะกับบริษัทคุณ</h2>
+      <p class="lead" style="margin-top:16px">ซื้อขาดใช้ได้ตลอดไป หรือรายเดือนที่เราดูแลและอัปเดตให้ตลอด</p>
+    </div>
+    <div class="plans">
+      <div class="pl rv d1">
+        <div class="nm">ซื้อขาด</div>
+        <div class="for">อยากได้ระบบเป็นของตัวเอง ไม่มีค่าใช้จ่ายต่อเนื่อง</div>
+        <div class="price">฿ ______<small>จ่ายครั้งเดียว</small></div>
+        <ul>
+          <li>ระบบเวอร์ชันปัจจุบัน ใช้ได้ตลอดไป</li>
+          <li>ไม่จำกัดโครงการ ไม่จำกัดผู้ใช้</li>
+          <li>คู่มือติดตั้งพร้อมใช้</li>
+          <li>ดูแลแก้ปัญหา 90 วันแรก</li>
+          <li class="no">ไม่มีอัปเดตเวอร์ชันใหม่</li>
+        </ul>
+        <a class="btn btn-ghost" href="#contact">สอบถามรายละเอียด</a>
+      </div>
+
+      <div class="pl best rv d2">
+        <div class="nm">รายเดือน <span class="tag">คุ้มที่สุด</span></div>
+        <div class="for">อยากได้ของใหม่ตลอด ไม่ต้องดูแลระบบเอง</div>
+        <div class="price">฿ ______<small>ต่อเดือน · เดือนแรกฟรี</small></div>
+        <ul>
+          <li>ติดตั้งให้ + สอนทีมใช้งาน</li>
+          <li>อัปเดตฟีเจอร์ใหม่อัตโนมัติ</li>
+          <li>เว็บลูกค้าเปิดเร็วกว่า</li>
+          <li>ดูแลตอบคำถามไม่จำกัด</li>
+          <li>เพิ่มโครงการใหม่ช่วยตั้งให้</li>
+        </ul>
+        <a class="btn btn-gold" href="#contact">เริ่มเดือนแรกฟรี</a>
+      </div>
+
+      <div class="pl rv d3">
+        <div class="nm">ติดตั้งให้ + สอน</div>
+        <div class="for">เสริมกับแบบซื้อขาด ถ้าไม่อยากติดตั้งเอง</div>
+        <div class="price">฿ ______<small>ครั้งเดียว</small></div>
+        <ul>
+          <li>ติดตั้งให้ทั้งหมดผ่านวิดีโอคอล</li>
+          <li>ตั้งค่าโครงการแรกให้พร้อมใช้</li>
+          <li>ใส่แผนงานและงวดงานให้</li>
+          <li>สอนทีมใช้งาน 1 ชั่วโมง</li>
+          <li>ตั้งบอทไลน์ให้ (รุ่น Pro)</li>
+        </ul>
+        <a class="btn btn-ghost" href="#contact">สอบถามรายละเอียด</a>
+      </div>
+    </div>
+    <p class="center sub rv" style="margin-top:30px">ราคาสำหรับผู้ใช้รุ่นแรกมีส่วนลดพิเศษ · สอบถามได้ก่อนตัดสินใจ</p>
+  </div>
+</section>
+
+<!-- ══════════ คำถาม ══════════ -->
+<section class="sec" id="faq">
+  <div class="wrap">
+    <div class="center rv">
+      <div class="eyebrow">คำถามที่พบบ่อย</div>
+      <h2 class="h-lg">สงสัยอะไรบ้าง</h2>
+    </div>
+    <div class="faq" id="faqBox">
+      <div class="qa"><button>ต้องเช่าเซิร์ฟเวอร์เองไหม มีค่าใช้จ่ายรายเดือนอะไรอีกหรือเปล่า</button>
+        <div class="ans"><p>ไม่ต้องครับ ระบบทำงานบน Google Sheets และ Google Drive ของบริษัทคุณเอง
+          ซึ่งใช้ได้ฟรี ไม่มีค่าเซิร์ฟเวอร์รายเดือน แบบซื้อขาดจึงไม่มีค่าใช้จ่ายต่อเนื่องเลย</p></div></div>
+
+      <div class="qa"><button>ทีมช่างต้องเรียนรู้อะไรใหม่ไหม</button>
+        <div class="ans"><p>รุ่น Pro แทบไม่ต้องเลย ช่างพิมพ์รายงานและส่งรูปในกลุ่มไลน์เดิมเหมือนที่ทำอยู่
+          แค่ขึ้นต้นข้อความด้วย #สรุปงานวันนี้ ที่เหลือบอทจัดการให้
+          ส่วนคนที่ต้องเรียนคือแอดมินหรือผู้จัดการโครงการที่กดอนุมัติ ซึ่งสอนกันประมาณ 30 นาที</p></div></div>
+
+      <div class="qa"><button>ข้อมูลลูกค้าและรูปหน้างานเก็บที่ไหน ปลอดภัยไหม</button>
+        <div class="ans"><p>ทุกอย่างอยู่ในบัญชี Google ของบริษัทคุณเอง เราไม่ได้เก็บข้อมูลของคุณไว้
+          เจ้าของบ้านต้องใส่รหัสส่วนตัวถึงจะเปิดดูได้ และเห็นเฉพาะโครงการของตัวเองเท่านั้น
+          ระบบสำรองข้อมูลอัตโนมัติทุกคืน</p></div></div>
+
+      <div class="qa"><button>ถ้าเลิกใช้แบบรายเดือน ข้อมูลหายไหม</button>
+        <div class="ans"><p>ไม่หายครับ ข้อมูล รูป และรายงานทั้งหมดอยู่ใน Google ของคุณเหมือนเดิม
+          หน้าตรวจของทีมยังใช้ได้ สิ่งที่หยุดคือหน้าเว็บที่เจ้าของบ้านเปิดดูและบริการดูแลจากเรา</p></div></div>
+
+      <div class="qa"><button>มีหลายโครงการพร้อมกันได้ไหม คิดเงินเพิ่มไหม</button>
+        <div class="ans"><p>ได้ไม่จำกัด และไม่คิดเพิ่มรายโครงการ การเพิ่มโครงการใหม่คือกรอกข้อมูลหนึ่งแถว
+          แล้วกดปุ่ม ระบบสร้างโฟลเดอร์และไฟล์ที่เกี่ยวข้องให้เอง ใช้เวลาประมาณ 10 นาที</p></div></div>
+
+      <div class="qa"><button>ไม่อยากให้ลูกค้าเห็นเรื่องเงินหรืองวดงาน ทำได้ไหม</button>
+        <div class="ans"><p>ได้ครับ แค่เว้นช่องงวดงานว่างไว้ ระบบจะซ่อนส่วนนั้นให้อัตโนมัติ
+          ลูกค้าจะเห็นแค่ความคืบหน้า รายงานรายวัน และสรุปรายสัปดาห์</p></div></div>
+
+      <div class="qa"><button>ติดตั้งยากไหม ต้องมีคนไอทีหรือเปล่า</button>
+        <div class="ans"><p>ไม่ต้องมีคนไอทีครับ ระบบมีเมนูติดตั้งเป็นขั้นตอน 1-2-3 กดตามลำดับ
+          ระบบสร้างโฟลเดอร์และตั้งค่าให้เอง ใช้เวลาประมาณ 1 ชั่วโมง
+          หรือเลือกแพ็กเกจติดตั้งให้ แล้วเราทำให้ทั้งหมดผ่านวิดีโอคอล</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ปิดท้าย ══════════ -->
+<section class="sec final" id="contact">
+  <div class="wrap in center">
+    <div class="rv">
+      <h2 class="h-lg" style="color:#fff">ลองดูก่อนได้ ไม่ต้องสมัคร</h2>
+      <p class="lead" style="margin:16px auto 32px">เปิดตัวอย่างระบบจริง กดดูได้ทุกหน้า
+        แล้วค่อยคุยกันว่าเหมาะกับบริษัทคุณไหม</p>
+      <div class="cta-row">
+        <a class="btn btn-gold" href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">เปิดตัวอย่างระบบ →</a>
+        <a class="btn btn-ghost" href="#top">กลับขึ้นด้านบน</a>
+      </div>
+      <p class="note" style="margin-top:22px;font-size:13.5px">
+        สนใจแพ็กเกจหรืออยากให้ประเมินให้ก่อน ทักมาคุยได้เลย</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="in">
+    <div>© 2026 BaanProgress · ระบบรายงานความคืบหน้าโครงการก่อสร้าง</div>
+    <div><a href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">ตัวอย่างระบบ</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── ปรากฏตอนเลื่อน ── */
+  var revealAll = function(){ document.documentElement.classList.add('rv-all'); };
+  if(reduce || !('IntersectionObserver' in window)){
+    revealAll();
+  } else {
+    var fired = false;
+    var io = new IntersectionObserver(function(es){
+      fired = true;
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+    /* ตาข่ายนิรภัย: บางเบราว์เซอร์/โหมดประหยัด IO ไม่ทำงาน — ห้ามปล่อยให้หน้าว่าง */
+    setTimeout(function(){ if(!fired) revealAll(); }, 1200);
+  }
+
+  /* ── แชทไลน์ ── */
+  var chat = document.getElementById('chat');
+  if(chat){
+    var cio = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ chat.classList.add('in'); cio.unobserve(chat); } });
+    }, {threshold:.3});
+    cio.observe(chat);
+    setTimeout(function(){ chat.classList.add('in'); }, 2500);
+  }
+
+  /* ── นับตัวเลข ── */
+  document.querySelectorAll('[data-count]').forEach(function(el){
+    var end = +el.dataset.count;
+    if(reduce || !('IntersectionObserver' in window)){ el.textContent = end; return; }
+    var done = false;
+    setTimeout(function(){ if(!done){ done = true; el.textContent = end; } }, 1500);
+    var nio = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        nio.unobserve(el);
+        if(done) return;
+        done = true;
+        if(end === 0){ el.textContent = end; return; }
+        var t0 = null, dur = 1100;
+        function tick(ts){
+          if(!t0) t0 = ts;
+          var p = Math.min((ts - t0)/dur, 1);
+          el.textContent = Math.round(end * (1 - Math.pow(1-p, 3)));
+          if(p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }, {threshold:.6});
+    nio.observe(el);
+  });
+
+  /* ── นำทางติดบน ── */
+  var nav = document.getElementById('nav');
+  function onScroll(){ nav.classList.toggle('stuck', scrollY > 40); }
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  /* ── สลับแท็บโชว์ระบบ ── */
+  var tabs = document.getElementById('tabs');
+  if(tabs){
+    var btns = [].slice.call(tabs.querySelectorAll('.tb'));
+    var imgs = [].slice.call(document.querySelectorAll('#scr img'));
+    var dots = document.getElementById('dots');
+    btns.forEach(function(_, i){
+      var d = document.createElement('i');
+      if(i === 0) d.className = 'on';
+      dots.appendChild(d);
+    });
+    var dotEls = [].slice.call(dots.children);
+    var cur = 0, timer = null, auto = true;
+
+    function show(i){
+      cur = i;
+      btns.forEach(function(b, n){ b.classList.toggle('on', n === i); });
+      dotEls.forEach(function(d, n){ d.classList.toggle('on', n === i); });
+      var k = btns[i].dataset.shot;
+      imgs.forEach(function(im){ im.classList.toggle('on', im.dataset.k === k); });
+    }
+    function start(){ if(reduce) return; stop(); timer = setInterval(function(){ if(auto) show((cur+1) % btns.length); }, 4200); }
+    function stop(){ if(timer) clearInterval(timer); timer = null; }
+
+    btns.forEach(function(b, i){
+      b.addEventListener('click', function(){ auto = false; stop(); show(i); });
+    });
+
+    var tio = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting && auto) start(); else stop(); });
+    }, {threshold:.25});
+    tio.observe(tabs.closest('.show'));
+
+    /* ปัดบนมือถือ */
+    var wrap = document.querySelector('.shot-wrap');
+    var x0 = null;
+    wrap.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; }, {passive:true});
+    wrap.addEventListener('touchend', function(e){
+      if(x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if(Math.abs(dx) > 45){ auto = false; stop(); show((cur + (dx < 0 ? 1 : btns.length-1)) % btns.length); }
+      x0 = null;
+    }, {passive:true});
+  }
+
+  /* ── สลับอุปกรณ์ ── */
+  var seg = document.getElementById('seg');
+  if(seg){
+    seg.addEventListener('click', function(e){
+      var b = e.target.closest('button'); if(!b) return;
+      [].slice.call(seg.children).forEach(function(x){ x.classList.toggle('on', x === b); });
+      document.querySelectorAll('.devview > div').forEach(function(d){
+        d.classList.toggle('on', d.dataset.dev === b.dataset.dev);
+      });
+    });
+  }
+
+  /* ── คำถาม ── */
+  document.querySelectorAll('#faqBox .qa').forEach(function(qa){
+    var btn = qa.querySelector('button'), ans = qa.querySelector('.ans');
+    btn.addEventListener('click', function(){
+      var open = qa.classList.contains('open');
+      document.querySelectorAll('#faqBox .qa.open').forEach(function(o){
+        o.classList.remove('open'); o.querySelector('.ans').style.maxHeight = null;
+      });
+      if(!open){ qa.classList.add('open'); ans.style.maxHeight = ans.scrollHeight + 'px'; }
+    });
+  });
+
+  /* ── พารัลแลกซ์เบา ๆ ที่ฮีโร่ ── */
+  var hp = document.getElementById('heroPhone');
+  if(hp && !reduce){
+    var ticking = false;
+    addEventListener('scroll', function(){
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(function(){
+        var y = Math.min(scrollY, 620);
+        hp.style.transform = 'translateY(' + (y * -0.1) + 'px) scale(' + (1 - y * 0.00012) + ')';
+        ticking = false;
+      });
+    }, {passive:true});
+  }
+})();
+</script>
+</body>
+</html>
