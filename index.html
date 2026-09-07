@@ -235,6 +235,11 @@ html.anim .chat.in .mini-card{opacity:1;transform:none}
 .dots i.on{background:var(--gold);width:22px;border-radius:4px}
 @media(max-width:960px){.dots{display:flex}}
 
+.vidbox{max-width:330px;margin:40px auto 0;border-radius:38px;padding:9px;
+  background:linear-gradient(160deg,#39445a,#171e2b 42%,#333d51);
+  box-shadow:0 40px 80px -22px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.07)}
+.vidbox video{width:100%;display:block;border-radius:30px;background:#0a0e16}
+
 /* ─────────────── ตารางคุณสมบัติ ─────────────── */
 .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px}
 @media(max-width:940px){.feats{grid-template-columns:1fr 1fr}}
@@ -405,6 +410,24 @@ footer a:hover{color:var(--gold-lt)}
       <div class="pain rv d3"><div class="q">03</div>
         <h3>ดูไม่มืออาชีพตอนเสนองาน</h3>
         <p>คู่แข่งโชว์ระบบติดตามงานให้ลูกค้าดู เราได้แต่บอกปากเปล่าว่า “ส่งรายงานให้ครับ”</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ วิดีโอ ══════════ -->
+<section class="sec dark">
+  <div class="wrap center">
+    <div class="rv">
+      <div class="eyebrow">ดูของจริง 45 วินาที</div>
+      <h2 class="h-lg">นี่คือสิ่งที่เจ้าของบ้านเห็น</h2>
+      <p class="lead" style="margin-top:16px">ภาพจากระบบจริงทั้งหมด (ใช้ข้อมูลตัวอย่าง) — กดเล่นได้เลย</p>
+    </div>
+    <div class="vidbox rv d1">
+      <video controls playsinline preload="none" poster="img/video-poster.webp"
+             aria-label="วิดีโอแนะนำเว็บที่เจ้าของบ้านเห็น">
+        <source src="demo-video.mp4" type="video/mp4">
+        เบราว์เซอร์ของคุณเปิดวิดีโอนี้ไม่ได้ — <a href="demo-video.mp4">ดาวน์โหลดวิดีโอ</a>
+      </video>
     </div>
   </div>
 </section>
