@@ -282,8 +282,8 @@ html.anim .chat.in .mini-card{opacity:1;transform:none}
 .ed li.no::before{border-color:#c9d2de}
 
 /* ─────────────── ราคา ─────────────── */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px;align-items:start}
-@media(max-width:960px){.plans{grid-template-columns:1fr;max-width:520px;margin-inline:auto}}
+.plans{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:52px;align-items:start;max-width:800px;margin-inline:auto}
+@media(max-width:760px){.plans{grid-template-columns:1fr;max-width:460px}}
 .pl{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.12);border-radius:22px;
   padding:30px 27px;transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s,border-color .3s}
 .pl:hover{transform:translateY(-6px);border-color:rgba(214,168,92,.45);box-shadow:0 26px 54px -26px rgba(0,0,0,.75)}
@@ -606,17 +606,18 @@ footer a:hover{color:var(--gold-lt)}
     <div class="center rv">
       <div class="eyebrow">แพ็กเกจ</div>
       <h2 class="h-lg">เลือกแบบที่เหมาะกับบริษัทคุณ</h2>
-      <p class="lead" style="margin-top:16px">ซื้อขาดใช้ได้ตลอดไป หรือรายเดือนที่เราดูแลและอัปเดตให้ตลอด</p>
+      <p class="lead" style="margin-top:16px">ทั้งสองแบบเราติดตั้งให้และสอนทีมใช้งาน — ต่างกันที่การอัปเดตและการดูแลระยะยาว</p>
     </div>
     <div class="plans">
       <div class="pl rv d1">
         <div class="nm">ซื้อขาด</div>
-        <div class="for">อยากได้ระบบเป็นของตัวเอง ไม่มีค่าใช้จ่ายต่อเนื่อง</div>
+        <div class="for">จ่ายครั้งเดียว เป็นของบริษัทคุณ ไม่มีค่าใช้จ่ายต่อเนื่อง</div>
         <div class="price">฿ ______<small>จ่ายครั้งเดียว</small></div>
         <ul>
+          <li><b>ติดตั้งให้ + สอนทีมใช้งาน</b></li>
           <li>ระบบเวอร์ชันปัจจุบัน ใช้ได้ตลอดไป</li>
           <li>ไม่จำกัดโครงการ ไม่จำกัดผู้ใช้</li>
-          <li>คู่มือติดตั้งพร้อมใช้</li>
+          <li>ตั้งค่าโครงการแรกให้พร้อมใช้</li>
           <li>ดูแลแก้ปัญหา 90 วันแรก</li>
           <li class="no">ไม่มีอัปเดตเวอร์ชันใหม่</li>
         </ul>
@@ -628,7 +629,7 @@ footer a:hover{color:var(--gold-lt)}
         <div class="for">อยากได้ของใหม่ตลอด ไม่ต้องดูแลระบบเอง</div>
         <div class="price">฿ ______<small>ต่อเดือน · เดือนแรกฟรี</small></div>
         <ul>
-          <li>ติดตั้งให้ + สอนทีมใช้งาน</li>
+          <li><b>ติดตั้งให้ + สอนทีมใช้งาน</b></li>
           <li>อัปเดตฟีเจอร์ใหม่อัตโนมัติ</li>
           <li>เว็บลูกค้าเปิดเร็วกว่า</li>
           <li>ดูแลตอบคำถามไม่จำกัด</li>
@@ -637,20 +638,7 @@ footer a:hover{color:var(--gold-lt)}
         <a class="btn btn-gold" href="#contact">เริ่มเดือนแรกฟรี</a>
       </div>
 
-      <div class="pl rv d3">
-        <div class="nm">ติดตั้งให้ + สอน</div>
-        <div class="for">เสริมกับแบบซื้อขาด ถ้าไม่อยากติดตั้งเอง</div>
-        <div class="price">฿ ______<small>ครั้งเดียว</small></div>
-        <ul>
-          <li>ติดตั้งให้ทั้งหมดผ่านวิดีโอคอล</li>
-          <li>ตั้งค่าโครงการแรกให้พร้อมใช้</li>
-          <li>ใส่แผนงานและงวดงานให้</li>
-          <li>สอนทีมใช้งาน 1 ชั่วโมง</li>
-          <li>ตั้งบอทไลน์ให้ (รุ่น Pro)</li>
-        </ul>
-        <a class="btn btn-ghost" href="#contact">สอบถามรายละเอียด</a>
       </div>
-    </div>
     <p class="center sub rv" style="margin-top:30px">ราคาสำหรับผู้ใช้รุ่นแรกมีส่วนลดพิเศษ · สอบถามได้ก่อนตัดสินใจ</p>
   </div>
 </section>
