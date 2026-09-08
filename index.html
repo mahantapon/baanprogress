@@ -310,6 +310,11 @@ html.anim .chat.in .mini-card{opacity:1;transform:none}
 .pl li.no::before{border-color:rgba(255,255,255,.2)}
 .pl .btn{width:100%}
 
+.planview > div{display:none}
+.planview > div.on{display:block;animation:fadeUp .45s cubic-bezier(.2,.7,.3,1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.pl .perday{font-size:12.5px;color:var(--on-d3);margin:-14px 0 18px}
+
 /* ─────────────── คำถาม ─────────────── */
 .faq{max-width:800px;margin:44px auto 0}
 .qa{border-bottom:1px solid var(--line)}
@@ -631,38 +636,51 @@ footer a:hover{color:var(--gold-lt)}
       <h2 class="h-lg">เลือกแบบที่เหมาะกับบริษัทคุณ</h2>
       <p class="lead" style="margin-top:16px">ทั้งสองแบบเราติดตั้งให้และสอนทีมใช้งาน — ต่างกันที่การอัปเดตและการดูแลระยะยาว</p>
     </div>
-    <div class="plans">
-      <div class="pl rv d1">
+    <div class="center rv d1">
+      <div class="seg" id="edseg">
+        <button class="on" data-ed="lite">Lite · กรอกเอง</button>
+        <button data-ed="pro">Pro · บอทไลน์</button>
+      </div>
+    </div>
+
+    <div class="planview rv d2" id="planview">
+      <div class="on" data-ed="lite"><div class="plans">
+      <div class="pl">
         <div class="nm">ซื้อขาด</div>
-        <div class="for">จ่ายครั้งเดียว เป็นของบริษัทคุณ ไม่มีค่าใช้จ่ายต่อเนื่อง</div>
-        <div class="price">฿ ______<small>จ่ายครั้งเดียว</small></div>
-        <ul>
-          <li><b>ติดตั้งให้ + สอนทีมใช้งาน</b></li>
-          <li>ระบบเวอร์ชันปัจจุบัน ใช้ได้ตลอดไป</li>
-          <li>ไม่จำกัดโครงการ ไม่จำกัดผู้ใช้</li>
-          <li>ตั้งค่าโครงการแรกให้พร้อมใช้</li>
-          <li>ดูแลแก้ปัญหา 90 วันแรก</li>
-          <li class="no">ไม่มีอัปเดตเวอร์ชันใหม่</li>
-        </ul>
+        <div class="for">จ่ายครั้งเดียว เป็นของบริษัทคุณ</div>
+        <div class="price">฿24,000<small>จ่ายครั้งเดียว ใช้ได้ตลอดไป</small></div>
+        <ul><li><b>ติดตั้งให้ + สอนทีมใช้งาน</b></li><li>ระบบเวอร์ชันปัจจุบัน ใช้ได้ตลอดไป</li><li>ไม่จำกัดโครงการ ไม่จำกัดผู้ใช้</li><li>ตั้งค่าโครงการแรกให้พร้อมใช้</li><li>ดูแลแก้ปัญหา 90 วันแรก</li><li>แบ่งจ่าย 2 งวดได้</li><li class="no">ไม่มีอัปเดตเวอร์ชันใหม่</li></ul>
         <a class="btn btn-ghost" href="#contact">สอบถามรายละเอียด</a>
       </div>
-
-      <div class="pl best rv d2">
+      <div class="pl best">
         <div class="nm">รายเดือน <span class="tag">คุ้มที่สุด</span></div>
-        <div class="for">อยากได้ของใหม่ตลอด ไม่ต้องดูแลระบบเอง</div>
-        <div class="price">฿ ______<small>ต่อเดือน · ยกเลิกได้ทุกเมื่อ</small></div>
-        <ul>
-          <li><b>ติดตั้งให้ + สอนทีมใช้งาน</b></li>
-          <li>อัปเดตฟีเจอร์ใหม่อัตโนมัติ</li>
-          <li>เว็บลูกค้าเปิดเร็วกว่า</li>
-          <li>ดูแลตอบคำถามไม่จำกัด</li>
-          <li>เพิ่มโครงการใหม่ช่วยตั้งให้</li>
-        </ul>
+        <div class="for">อัปเดตเรื่อย ๆ เราดูแลให้ตลอด</div>
+        <div class="price">฿1,500<small>ต่อเดือน · ยกเลิกได้ทุกเมื่อ</small></div>
+        <div class="perday">ตกวันละ 50 บาท</div>
+        <ul><li><b>ติดตั้งให้ + สอนทีมใช้งาน</b></li><li>อัปเดตฟีเจอร์ใหม่อัตโนมัติ</li><li>เว็บลูกค้าเปิดเร็วกว่า</li><li>ตอบคำถาม/แก้ปัญหาไม่จำกัด</li><li>ช่วยตั้งค่าโครงการใหม่ให้</li><li>ยกเลิกได้ทุกเมื่อ ข้อมูลยังเป็นของคุณ</li></ul>
         <a class="btn btn-gold" href="#contact">สนใจแพ็กนี้</a>
       </div>
+      </div></div>
 
+      <div data-ed="pro"><div class="plans">
+      <div class="pl">
+        <div class="nm">ซื้อขาด</div>
+        <div class="for">จ่ายครั้งเดียว เป็นของบริษัทคุณ</div>
+        <div class="price">฿45,000<small>จ่ายครั้งเดียว ใช้ได้ตลอดไป</small></div>
+        <ul><li><b>ทุกอย่างในรุ่น Lite ครบ</b></li><li><b>บอทไลน์เก็บรายงาน + รูปให้อัตโนมัติ</b></li><li>ช่างพิมพ์ในกลุ่มเดิม ไม่ต้องเรียนรู้ใหม่</li><li>ผู้ช่วย AI ถามข้อมูลย้อนหลังในกลุ่ม</li><li>ตั้งบอทให้พร้อมใช้ทุกไซต์</li><li>แบ่งจ่าย 2 งวดได้</li><li class="no">ไม่มีอัปเดตเวอร์ชันใหม่</li></ul>
+        <a class="btn btn-ghost" href="#contact">สอบถามรายละเอียด</a>
       </div>
-    <p class="center sub rv" style="margin-top:30px">ราคาสำหรับผู้ใช้รุ่นแรกมีส่วนลดพิเศษ · สอบถามได้ก่อนตัดสินใจ</p>
+      <div class="pl best">
+        <div class="nm">รายเดือน <span class="tag">คุ้มที่สุด</span></div>
+        <div class="for">อัปเดตเรื่อย ๆ เราดูแลให้ตลอด</div>
+        <div class="price">฿2,900<small>ต่อเดือน · ยกเลิกได้ทุกเมื่อ</small></div>
+        <div class="perday">ตกวันละ 97 บาท</div>
+        <ul><li><b>ทุกอย่างในรุ่น Lite รายเดือน ครบ</b></li><li><b>บอทไลน์เก็บรายงาน + รูปให้อัตโนมัติ</b></li><li>ผู้ช่วย AI ในกลุ่มไลน์</li><li>จูน AI ให้อ่านข้อความช่างแม่นขึ้นเรื่อย ๆ</li><li>ตั้งบอทให้เมื่อเปิดไซต์ใหม่</li><li>ยกเลิกได้ทุกเมื่อ ข้อมูลยังเป็นของคุณ</li></ul>
+        <a class="btn btn-gold" href="#contact">สนใจแพ็กนี้</a>
+      </div>
+      </div></div>
+    </div>
+    <p class="center sub rv" style="margin-top:30px"><b style="color:var(--gold-lt)">ผู้ใช้ 3 รายแรก ลด 40%</b> — แลกกับการให้คำติชม และอนุญาตให้อ้างอิงชื่อบริษัท<br>ราคายังไม่รวมภาษีมูลค่าเพิ่ม · ขอให้ประเมินก่อนตัดสินใจได้</p>
   </div>
 </section>
 
@@ -835,6 +853,18 @@ footer a:hover{color:var(--gold-lt)}
       if(Math.abs(dx) > 45){ auto = false; stop(); show((cur + (dx < 0 ? 1 : btns.length-1)) % btns.length); }
       x0 = null;
     }, {passive:true});
+  }
+
+  /* ── สลับรุ่น Lite / Pro ── */
+  var edseg = document.getElementById('edseg');
+  if(edseg){
+    edseg.addEventListener('click', function(e){
+      var b = e.target.closest('button'); if(!b) return;
+      [].slice.call(edseg.children).forEach(function(x){ x.classList.toggle('on', x === b); });
+      document.querySelectorAll('#planview > div').forEach(function(p){
+        p.classList.toggle('on', p.dataset.ed === b.dataset.ed);
+      });
+    });
   }
 
   /* ── สลับอุปกรณ์ ── */
