@@ -33,7 +33,7 @@ body{margin:0;background:var(--paper);color:var(--txt);
   font-size:16.5px;line-height:1.78;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 h1,h2,h3,h4{font-family:'Anuphan','IBM Plex Sans Thai',sans-serif;font-weight:600;line-height:1.2;
   letter-spacing:-.015em;text-wrap:balance;margin:0}
-p{margin:0} a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
+p{margin:0;text-wrap:pretty} .bd{display:inline} @media(max-width:700px){.bd{display:none}} a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
 .sec{padding:var(--sp) 0;position:relative}
 .dark{background:var(--ink);color:var(--on-d)} .dark h1,.dark h2,.dark h3{color:#fff}
@@ -284,7 +284,7 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
 <!-- ══════════ นำทาง ══════════ -->
 <nav class="nav" id="nav"><div class="in">
   <a href="#top" class="brand"><span class="mk"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11.4 12 4l9 7.4V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#2a1e08"/></svg></span>BaanProgress</a>
-  <div class="links"><a href="#how">วิธีทำงาน</a><a href="#app">ฝั่งลูกค้า</a><a href="#team">ฝั่งทีมงาน</a><a href="#price">ราคา</a><a href="#faq">คำถาม</a></div>
+  <div class="links"><a href="#how">วิธีทำงาน</a><a href="#app">ฝั่งลูกค้า</a><a href="#team">ฝั่งทีมงาน</a><a href="#security">ความปลอดภัย</a><a href="#price">ราคา</a><a href="#faq">คำถาม</a></div>
   <a class="btn btn-gold btn-sm" href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">ดูตัวอย่างระบบ</a>
 </div></nav>
 
@@ -296,7 +296,7 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
     <div class="rv in">
       <div class="badge-demo">🤖 บอทไลน์ + เว็บลูกค้า สำหรับบริษัทรับสร้างบ้าน</div>
       <h1 class="h-xl">ทุกความคืบหน้าของบ้าน<br><span class="gd">อยู่ในมือลูกค้าคุณ</span></h1>
-      <p class="lead">ช่างพิมพ์ในกลุ่มไลน์เหมือนเดิม บอทเก็บให้ ทีมกดอนุมัติ — เจ้าของบ้านเห็นงานวันนี้และภาพหน้างานจริงทันที ไม่ต้องโทรถามอีก</p>
+      <p class="lead">ช่างพิมพ์ในกลุ่มไลน์เหมือนเดิม บอทเก็บให้ ทีมกดอนุมัติ<br class="bd">เจ้าของบ้านเห็นงานวันนี้และภาพหน้างานจริงทันที ไม่ต้องโทรถามอีก</p>
       <div class="cta-row">
         <a class="btn btn-gold" href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">ลองกดดูตัวอย่างจริง →</a>
         <a class="btn btn-ghost" href="#team">ดูฝั่งทีมงาน</a>
@@ -305,7 +305,7 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
     </div>
     <div class="phone hero-phone rv d2" id="heroPhone">
       <div class="notch"></div>
-      <div class="scr"><video autoplay muted loop playsinline preload="metadata" poster="img/video-poster.webp" aria-label="วิดีโอแนะนำเว็บที่เจ้าของบ้านเห็น"><source src="demo-video.mp4" type="video/mp4"></video></div>
+      <div class="scr"><video autoplay muted loop playsinline preload="auto" poster="img/hero-poster.webp" aria-label="ตัวอย่างเว็บที่เจ้าของบ้านเห็น"><source src="hero.mp4" type="video/mp4"></video></div>
     </div>
     <div class="stats">
       <div class="stat rv d1"><b data-count="1">0</b><span>วันติดตั้ง<br>ใช้ได้เลย</span></div>
@@ -323,7 +323,7 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
 <!-- ══════════ ปัญหา ══════════ -->
 <section class="sec soft"><div class="wrap">
   <div class="center rv"><div class="eyebrow">ปัญหาที่เจอทุกโครงการ</div><h2 class="h-lg">“งานถึงไหนแล้วครับ?”</h2>
-    <p class="lead" style="margin-top:14px">คำถามเดิมทุกสัปดาห์ จากลูกค้าทุกหลัง — ไม่ใช่เพราะเขาไม่เชื่อใจ แต่เพราะเขามองไม่เห็น</p></div>
+    <p class="lead" style="margin-top:14px">คำถามเดิมทุกสัปดาห์ จากลูกค้าทุกหลัง<br class="bd">ไม่ใช่เพราะเขาไม่เชื่อใจ — แต่เพราะเขามองไม่เห็น</p></div>
   <div class="pains">
     <div class="pain rv d1"><div class="q">01</div><h3>ลูกค้าโทรถามไม่หยุด</h3><p>ทีมเสียเวลาตอบซ้ำทุกวัน บางทีต้องวิ่งไปถ่ายรูปที่ไซต์มาส่งให้ดู</p></div>
     <div class="pain rv d2"><div class="q">02</div><h3>รูปจมอยู่ในไลน์</h3><p>ภาพหน้างานกระจัดกระจายในแชทกลุ่ม ย้อนหาว่าวันไหนทำอะไรแทบไม่ได้</p></div>
@@ -363,7 +363,7 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
 <!-- ══════════ ฝั่งลูกค้า ══════════ -->
 <section class="sec dark" id="app" style="padding-top:0"><div class="wrap">
   <div class="center rv"><div class="eyebrow">ฝั่งลูกค้า · สิ่งที่เจ้าของบ้านเห็น</div><h2 class="h-lg">เว็บส่วนตัวของบ้านแต่ละหลัง</h2>
-    <p class="lead" style="margin-top:14px">เปิดจากมือถือได้เลย ไม่ต้องโหลดแอป แต่ละหลังมีรหัสของตัวเอง เห็นเฉพาะโครงการตัวเอง</p></div>
+    <p class="lead" style="margin-top:14px">เปิดจากมือถือได้เลย ไม่ต้องโหลดแอป<br class="bd">แต่ละหลังมีรหัสของตัวเอง เห็นเฉพาะโครงการตัวเอง</p></div>
   <div class="show">
     <div class="tabs rv" id="tabs">
       <button class="tb on" data-shot="m_o"><span class="ic">🏠</span><span class="tx"><h3>ภาพรวมโครงการ</h3><p>วงแหวนความคืบหน้า มูลค่าสัญญา และขั้นตอนงานทั้งหมด</p></span></button>
@@ -426,7 +426,7 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
 <!-- ══════════ ทุกจอ ══════════ -->
 <section class="sec soft"><div class="wrap center">
   <div class="rv"><div class="eyebrow">ใช้ได้ทุกอุปกรณ์</div><h2 class="h-lg">มือถือ แท็บเล็ต หรือคอมพิวเตอร์</h2>
-    <p class="lead" style="margin:14px auto 40px">หน้าจอปรับตามอุปกรณ์อัตโนมัติ — ลูกค้าส่วนใหญ่เปิดจากมือถือ ส่วนทีมงานทำงานบนคอมได้เต็มจอ</p></div>
+    <p class="lead" style="margin:14px auto 40px">หน้าจอปรับตามอุปกรณ์อัตโนมัติ<br class="bd">ลูกค้าส่วนใหญ่เปิดจากมือถือ ส่วนทีมงานทำงานบนคอมได้เต็มจอ</p></div>
   <div class="combo rv d1">
     <div class="laptop"><div class="lid"><div class="scr"><img src="img/pc_d.webp" alt="หน้ารายงานประจำวันบนคอมพิวเตอร์" decoding="async"></div></div><div class="base"></div></div>
     <div class="phone"><div class="notch"></div><div class="scr"><img src="img/m_o.webp" alt="หน้าภาพรวมบนมือถือ" decoding="async"></div></div>
@@ -446,6 +446,23 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
     <div class="ft rv d1"><div class="ic">🏗️</div><h3>ไม่จำกัดโครงการ</h3><p>เพิ่มโครงการใหม่ = กรอกหนึ่งแถว ไม่คิดเพิ่มรายโครงการ</p></div>
     <div class="ft rv d2"><div class="ic">🎨</div><h3>เป็นแบรนด์ของคุณ</h3><p>โลโก้และชื่อบริษัทของคุณเอง ลูกค้าเห็นเป็นระบบของบริษัทคุณ</p></div>
     <div class="ft rv d3"><div class="ic">💾</div><h3>ข้อมูลเป็นของคุณ 100%</h3><p>ทุกอย่างอยู่ใน Google ของบริษัทคุณเอง สำรองอัตโนมัติทุกคืน เลิกใช้ก็ยังอยู่ครบ</p></div>
+    <div class="ft rv d1"><div class="ic">🔔</div><h3>แจ้งเตือนทีมในไลน์</h3><p>เผยแพร่แล้วแจ้งทันที · 2 ทุ่มยังไม่อนุมัติมีเตือน · ตอนเช้าส่งแผนงานวันนี้เข้ากลุ่มไซต์</p></div>
+    <div class="ft rv d2"><div class="ic">📆</div><h3>ปฏิทินและวันหยุดบริษัท</h3><p>ตั้งวันหยุดเองได้ ลูกค้าเห็นว่าวันไหนหยุด ไม่เข้าใจผิดว่างานหยุดชะงัก</p></div>
+    <div class="ft rv d3"><div class="ic">🩺</div><h3>ปุ่มตรวจสภาพระบบ</h3><p>กดครั้งเดียวได้สรุปสถานะทั้งระบบ ส่งให้เราวินิจฉัยได้ทันทีโดยไม่ต้องเปิดสิทธิ์อะไร</p></div>
+  </div>
+</div></section>
+
+<!-- ══════════ ความปลอดภัย ══════════ -->
+<section class="sec soft" id="security"><div class="wrap">
+  <div class="center rv"><div class="eyebrow">ความปลอดภัย</div><h2 class="h-lg">เจ้าของบ้านเห็นเฉพาะบ้านตัวเอง<br class="bd">ทีมคุมทุกอย่างก่อนเผยแพร่</h2>
+    <p class="lead" style="margin-top:14px">ออกแบบให้ข้อมูลลูกค้าไม่ปนกัน ไม่รั่ว และไม่หาย — โดยไม่ต้องมีฝ่ายไอที</p></div>
+  <div class="feats">
+    <div class="ft rv d1"><div class="ic">🔐</div><h3>รหัสรายหลัง ตรวจฝั่งเซิร์ฟเวอร์</h3><p>ข้อมูลไม่ได้ฝังอยู่ในหน้าเว็บ ใส่รหัสถูกระบบถึงจะส่งข้อมูลมา และส่งเฉพาะโครงการของรหัสนั้น</p></div>
+    <div class="ft rv d2"><div class="ic">🛡️</div><h3>กันเดารหัส</h3><p>ใส่ผิดซ้ำ ระบบหน่วงเวลาเพิ่มขึ้นเรื่อย ๆ และแจ้งเตือนทีมทันทีถ้ามีการเดารหัสผิดปกติ</p></div>
+    <div class="ft rv d3"><div class="ic">✅</div><h3>ไม่มีอะไรหลุดไปโดยไม่ตรวจ</h3><p>ทุกรายงานผ่านการอนุมัติจากทีมก่อนเสมอ ลบรายงานได้โดยข้อมูลต้นฉบับยังอยู่ครบ</p></div>
+    <div class="ft rv d1"><div class="ic">🏢</div><h3>ข้อมูลอยู่ใน Google ของบริษัทคุณ</h3><p>เข้ารหัส HTTPS ทุกหน้า สำรองอัตโนมัติทุกคืน เก็บย้อนหลัง 30 วัน เราไม่เก็บสำเนาข้อมูลของคุณ</p></div>
+    <div class="ft rv d2"><div class="ic">🔑</div><h3>หน้าทีมงานมีรหัสแยก</h3><p>ลูกค้าเข้าหน้าตรวจไม่ได้ · เปลี่ยนหรือสุ่มรหัสลูกค้าใหม่ได้ทันทีถ้ารหัสหลุด</p></div>
+    <div class="ft rv d3"><div class="ic">🚪</div><h3>รหัสลับไม่อยู่ในโค้ด</h3><p>โทเคนและกุญแจทั้งหมดเก็บในที่เก็บลับของ Google ไม่ฝังในไฟล์ · ลูกค้ากดออกจากระบบได้ทุกเมื่อ</p></div>
   </div>
 </div></section>
 
@@ -457,10 +474,10 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
       <p class="lead" style="margin-top:14px">ติดตั้งให้ สอนทีมให้ อัปเดตให้ ดูแลให้ — จ่ายรายเดือน ยกเลิกได้ทุกเมื่อ</p></div>
     <div class="price-wrap rv d1"><div class="pl">
       <div class="nm">BaanProgress Pro <span class="tag">บอทไลน์ + เว็บลูกค้า</span></div>
-      <div class="for">สำหรับบริษัทรับสร้างบ้าน / รีโนเวท ที่ใช้กลุ่มไลน์รายงานงานอยู่แล้ว</div>
+      <div class="for">สำหรับบริษัทรับสร้างบ้านและรีโนเวท ที่ใช้กลุ่มไลน์รายงานงานอยู่แล้ว</div>
       <div class="price">฿2,900<small>ต่อเดือน · ไม่จำกัดโครงการ · ยกเลิกได้ทุกเมื่อ</small></div>
-      <div class="perday">ตกวันละ 97 บาท — น้อยกว่าค่ากาแฟ 2 แก้ว</div>
-      <div class="early">🎁 ผู้ใช้ 3 รายแรก <b>฿1,740/เดือน</b> (ลด 40%) — แลกกับคำติชม และอนุญาตให้อ้างอิงชื่อบริษัท</div>
+      <div class="perday">ตกวันละ 97 บาท</div>
+      
       <ul>
         <li><b>ติดตั้งให้ทั้งหมด + สอนทีมใช้งาน</b> ผ่านวิดีโอคอล</li>
         <li>บอทไลน์เก็บรายงานและรูปจากทุกไซต์</li>
@@ -470,7 +487,7 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
         <li>ตอบคำถาม / แก้ปัญหา / ตั้งโครงการใหม่ให้ ไม่จำกัด</li>
         <li>ข้อมูลอยู่ใน Google ของคุณ เลิกใช้ก็ยังอยู่ครบ</li>
       </ul>
-      <a class="btn btn-gold" href="#contact">สนใจ ทักมาคุยได้เลย</a>
+      <div class="cta-row" style="justify-content:stretch"><a class="btn btn-gold" style="flex:1" href="https://line.me/ti/p/~khoonkao" target="_blank" rel="noopener">💬 แอดไลน์คุยกับเก้า</a><a class="btn btn-ghost" style="flex:1" href="tel:0624964472">📞 062-496-4472</a></div>
     </div></div>
     <div class="incl">
       <div class="inc rv d1"><div class="ic">🛠️</div><h3>เราติดตั้งให้</h3><p>นัดวิดีโอคอล 1 ชั่วโมง ตั้งค่าโครงการแรก ผูกบอทเข้ากลุ่ม สอนทีมใช้จบในวันเดียว</p></div>
@@ -502,15 +519,15 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
   <div class="wrap in center"><div class="rv">
     <h2 class="h-lg" style="color:#fff">ลองดูก่อนได้ ไม่ต้องสมัคร</h2>
     <p class="lead" style="margin:14px auto 30px">เปิดตัวอย่างระบบจริง กดดูได้ทุกหน้า แล้วค่อยคุยกันว่าเหมาะกับบริษัทคุณไหม</p>
-    <div class="cta-row"><a class="btn btn-gold" href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">เปิดตัวอย่างระบบ →</a><a class="btn btn-ghost" href="#top">กลับขึ้นด้านบน</a></div>
-    <p class="note" style="margin-top:20px;font-size:13.5px">สนใจแพ็กเกจหรืออยากให้ประเมินให้ก่อน ทักมาคุยได้เลย</p>
+    <div class="cta-row"><a class="btn btn-gold" href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">เปิดตัวอย่างระบบ →</a></div>
+    <div class="cta-row" style="margin-top:26px"><a class="btn btn-gold" href="https://line.me/ti/p/~khoonkao" target="_blank" rel="noopener">💬 LINE: khoonkao</a><a class="btn btn-ghost" href="tel:0624964472">📞 062-496-4472 (เก้า)</a></div><p class="note" style="margin-top:16px;font-size:13.5px">ทักมาคุยก่อนได้ ประเมินให้ฟรี ไม่มีข้อผูกมัด</p>
   </div></div>
 </section>
-<footer><div class="in"><div>© 2026 BaanProgress · ระบบรายงานความคืบหน้าโครงการก่อสร้าง</div><div><a href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">ตัวอย่างระบบ</a></div></div></footer>
+<footer><div class="in"><div>© 2026 BaanProgress · ระบบรายงานความคืบหน้าโครงการก่อสร้าง</div><div>ติดต่อ: <a href="tel:0624964472">062-496-4472</a> · <a href="https://line.me/ti/p/~khoonkao" target="_blank" rel="noopener">LINE khoonkao</a> · <a href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">ตัวอย่างระบบ</a></div></div></footer>
 
 <div class="mcta" id="mcta">
-  <a class="btn btn-ghost" href="https://mahantapon.github.io/construction-report-demo/" target="_blank" rel="noopener">ดูตัวอย่าง</a>
-  <a class="btn btn-gold" href="#price">ดูราคา</a>
+  <a class="btn btn-ghost" href="tel:0624964472">📞 โทร</a>
+  <a class="btn btn-gold" href="https://line.me/ti/p/~khoonkao" target="_blank" rel="noopener">💬 แอดไลน์</a>
 </div>
 
 <script>
