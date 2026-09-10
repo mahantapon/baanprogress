@@ -286,6 +286,22 @@ html.anim .mini-card{opacity:0;transform:translateY(14px)} html.anim .chat.in .m
 /* ─────────────── ปิดท้าย / ฟุตเตอร์ / ปุ่มลอยมือถือ ─────────────── */
 .final{background:var(--ink);text-align:center;position:relative;overflow:hidden}
 .final .lead{color:var(--on-d2)} .final .note{color:var(--on-d3)}
+.contact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:760px;margin:34px auto 0;text-align:left}
+@media(max-width:560px){.contact-grid{grid-template-columns:1fr}}
+.ct{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:18px;min-width:0;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;
+  transition:transform .2s,background .2s,border-color .2s}
+.ct:hover{transform:translateY(-2px);background:rgba(255,255,255,.1);border-color:rgba(214,168,92,.55)}
+.ct:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.ci{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:0 0 auto}
+.ci svg{width:23px;height:23px;display:block}
+.ci-line{background:#06C755}.ci-tel{background:linear-gradient(160deg,var(--gold-lt),var(--gold))}
+.ci-fb{background:#1877F2}.ci-mail{background:#34445E}
+.ct-t{display:flex;flex-direction:column;min-width:0;line-height:1.4;flex:1}
+.ct-t b{font-family:'Anuphan',sans-serif;font-size:16px;font-weight:600;color:#fff}
+.ct-t span{font-size:14px;color:var(--on-d2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ct-go{font-size:13px;color:var(--gold-lt);font-weight:600;white-space:nowrap}
+@media(max-width:380px){.ct-go{display:none}}
 footer{background:var(--ink);color:var(--on-d3);padding:34px 0 110px;font-size:13.5px;border-top:1px solid rgba(255,255,255,.07)}
 @media(min-width:761px){footer{padding-bottom:34px}}
 footer .in{max-width:var(--maxw);margin:0 auto;padding:0 22px;display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap}
@@ -296,6 +312,12 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
 .mcta.show{transform:none} .mcta .btn{flex:1;padding:12px 10px;font-size:14px}
 @media(max-width:760px){.mcta{display:flex}}
 </style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"BaanProgress","url":"https://www.baanprogress.com/","logo":"https://www.baanprogress.com/img/icon.png",
+ "email":"baanprogress@gmail.com","telephone":"+66-62-496-4472",
+ "sameAs":["https://www.facebook.com/profile.php?id=61594196734033","https://line.me/R/ti/p/%40041ukzqc"],
+ "contactPoint":[{"@type":"ContactPoint","contactType":"sales","telephone":"+66-62-496-4472","email":"baanprogress@gmail.com","areaServed":"TH","availableLanguage":["th"]}]}
+</script>
 </head>
 <body>
 <div class="prog" id="prog"></div>
@@ -303,7 +325,7 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
 <!-- ══════════ นำทาง ══════════ -->
 <nav class="nav" id="nav"><div class="in">
   <a href="#top" class="brand"><span class="mk"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11.4 12 4l9 7.4V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#2a1e08"/></svg></span>BaanProgress</a>
-  <div class="links"><a href="#how">วิธีทำงาน</a><a href="#app">ฝั่งลูกค้า</a><a href="#team">ฝั่งทีมงาน</a><a href="#security">ความปลอดภัย</a><a href="#price">ราคา</a><a href="#faq">คำถาม</a></div>
+  <div class="links"><a href="#how">วิธีทำงาน</a><a href="#app">ฝั่งลูกค้า</a><a href="#team">ฝั่งทีมงาน</a><a href="#security">ความปลอดภัย</a><a href="#price">ราคา</a><a href="#faq">คำถาม</a><a href="#contact">ติดต่อ</a></div>
   <a class="btn btn-gold btn-sm" href="https://demo.baanprogress.com/" target="_blank" rel="noopener">ดูตัวอย่างระบบ</a>
 </div></nav>
 
@@ -540,10 +562,25 @@ footer a{color:var(--on-d2)} footer a:hover{color:var(--gold-lt)}
     <h2 class="h-lg" style="color:#fff">ลองดูก่อนได้ ไม่ต้องสมัคร</h2>
     <p class="lead" style="margin:14px auto 30px">เปิดตัวอย่างระบบจริง กดดูได้ทุกหน้า แล้วค่อยคุยกันว่าเหมาะกับบริษัทคุณไหม</p>
     <div class="cta-row"><a class="btn btn-gold" href="https://demo.baanprogress.com/" target="_blank" rel="noopener">เปิดตัวอย่างระบบ →</a></div>
-    <div class="cta-row" style="margin-top:26px"><a class="btn btn-gold" href="https://line.me/R/ti/p/%40041ukzqc" target="_blank" rel="noopener">💬 แอดไลน์ BaanProgress</a><a class="btn btn-ghost" href="tel:0624964472">📞 062-496-4472 (เก้า)</a></div><p class="note" style="margin-top:16px;font-size:13.5px">ทักมาคุยก่อนได้ ประเมินให้ฟรี ไม่มีข้อผูกมัด</p>
+    <h3 class="h-md" style="color:#fff;margin-top:54px;font-size:clamp(22px,3vw,28px)">ติดต่อเรา</h3>
+    <div class="contact-grid">
+      <a class="ct" href="https://line.me/R/ti/p/%40041ukzqc" target="_blank" rel="noopener" aria-label="แอดไลน์ BaanProgress @041ukzqc">
+        <span class="ci ci-line"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.6 0 .9l-.1.9c0 .3-.2 1 .9.5s6-3.5 8.1-6c1.5-1.6 2.2-3.2 2.2-4.8C22 6.6 17.5 3 12 3zM8.3 13.3H6.4c-.3 0-.5-.2-.5-.5V9c0-.3.2-.5.5-.5s.5.2.5.5v3.3h1.4c.3 0 .5.2.5.5s-.2.5-.5.5zm2 -.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V9c0-.3.2-.5.5-.5s.5.2.5.5v3.8zm4.6 0c0 .2-.1.4-.3.5h-.2c-.2 0-.3-.1-.4-.2l-1.9-2.6v2.3c0 .3-.2.5-.5.5s-.5-.2-.5-.5V9c0-.2.1-.4.3-.5h.2c.2 0 .3.1.4.2l1.9 2.6V9c0-.3.2-.5.5-.5s.5.2.5.5v3.8zm3.1-2.4c.3 0 .5.2.5.5s-.2.5-.5.5h-1.4v.9h1.4c.3 0 .5.2.5.5s-.2.5-.5.5h-1.9c-.3 0-.5-.2-.5-.5V9c0-.3.2-.5.5-.5H18c.3 0 .5.2.5.5s-.2.5-.5.5h-1.4v.9H18z"/></svg></span>
+        <span class="ct-t"><b>LINE</b><span>@041ukzqc</span></span><span class="ct-go">แอดไลน์ →</span></a>
+      <a class="ct" href="tel:0624964472" aria-label="โทร 062-496-4472">
+        <span class="ci ci-tel"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#241a08" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg></span>
+        <span class="ct-t"><b>โทร</b><span>062-496-4472 (เก้า)</span></span><span class="ct-go">โทรเลย →</span></a>
+      <a class="ct" href="https://www.facebook.com/profile.php?id=61594196734033" target="_blank" rel="noopener" aria-label="เพจ Facebook BaanProgress">
+        <span class="ci ci-fb"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.5V4.4c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2.4H8v3h2.6V21h2.9z"/></svg></span>
+        <span class="ct-t"><b>Facebook</b><span>BaanProgress</span></span><span class="ct-go">ไปที่เพจ →</span></a>
+      <a class="ct" href="mailto:baanprogress@gmail.com" aria-label="อีเมล baanprogress@gmail.com">
+        <span class="ci ci-mail"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M4 5h16c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2zm0 2v.5l8 5 8-5V7H4zm16 2.8-7.5 4.7c-.3.2-.7.2-1 0L4 9.8V17h16V9.8z"/></svg></span>
+        <span class="ct-t"><b>อีเมล</b><span>baanprogress@gmail.com</span></span><span class="ct-go">ส่งอีเมล →</span></a>
+    </div>
+    <p class="note" style="margin-top:18px;font-size:13.5px">ทักมาคุยก่อนได้ ประเมินให้ฟรี ไม่มีข้อผูกมัด · ตอบไวที่สุดทาง LINE</p>
   </div></div>
 </section>
-<footer><div class="in"><div>© 2026 BaanProgress · ระบบรายงานความคืบหน้าโครงการก่อสร้าง</div><div>ติดต่อ: <a href="tel:0624964472">062-496-4472</a> · <a href="https://line.me/R/ti/p/%40041ukzqc" target="_blank" rel="noopener">LINE @041ukzqc</a> · <a href="https://demo.baanprogress.com/" target="_blank" rel="noopener">ตัวอย่างระบบ</a></div></div></footer>
+<footer><div class="in"><div>© 2026 BaanProgress · ระบบรายงานความคืบหน้าโครงการก่อสร้าง</div><div>ติดต่อ: <a href="tel:0624964472">062-496-4472</a> · <a href="https://line.me/R/ti/p/%40041ukzqc" target="_blank" rel="noopener">LINE @041ukzqc</a> · <a href="https://www.facebook.com/profile.php?id=61594196734033" target="_blank" rel="noopener">Facebook</a> · <a href="mailto:baanprogress@gmail.com">baanprogress@gmail.com</a> · <a href="https://demo.baanprogress.com/" target="_blank" rel="noopener">ตัวอย่างระบบ</a></div></div></footer>
 
 <div class="mcta" id="mcta">
   <a class="btn btn-ghost" href="tel:0624964472">📞 โทร</a>
